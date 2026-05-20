@@ -1,0 +1,18 @@
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.2
+numpy==1.26.2
+# Instalamos la versión CPU de PyTorch por defecto para que el contenedor
+# sea ligero y corra en CUALQUIER computadora (Windows, Mac, Linux).
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.5.1+cpu
+torch_geometric==2.7.0
+# --- Módulo de Seguridad (Ítem 5 y 6 de la Rúbrica) ---
+bcrypt==4.1.2
+PyJWT==2.8.0
+python-dotenv==1.0.0
+
+# --- Módulo de Base de Datos y ORM (Ítem 1 y 3 de la Rúbrica) ---
+SQLAlchemy==2.0.23
+psycopg2-binary==2.9.9
+GeoAlchemy2==0.14.3

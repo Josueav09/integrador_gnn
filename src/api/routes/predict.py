@@ -1,0 +1,40 @@
+from fastapi import APIRouter, Depends
+from pydantic import BaseModel
+
+from src.security.jwt_handler import get_current_user
+from src.services.gnn_service import GNNService
+
+router = APIRouter(prefix="/predict", tags=["Predicciones GNN"])
+
+class ConsultaPredictiva(BaseModel):
+    ventana_historica: list
+
+@router.post("/predecir")
+async def ejecutar_prediccion(
+    consulta: ConsultaPredictiva, 
+    top_k: int = 50,
+    token: dict = Depends(get_current_user)
+):
+    """
+    ENDPOINT CORE: Controlador limpio que delega la inferencia a la capa de Servicios.
+    """
+    # Importamos las variables de memoria global
+    from src.api.main import ml_models, hardware_device, UMBRAL_PNP
+
+    # Delegamos el cálculo complejo al Servicio GNN
+    hotspots_prioritarios = GNNService.ejecutar_inferencia(
+        ventana_historica=consulta.ventana_historica,
+        top_k=top_k,
+        umbral=UMBRAL_PNP,
+        ml_models=ml_models,
+        device=hardware_device
+    )
+    
+    return {
+        "status": "success",
+        "agente_solicitante": token["user_id"], 
+        "metricas_despliegue": {
+            "hotspots_enviados_a_pnp": len(hotspots_prioritarios),
+        },
+        "hotspots": hotspots_prioritarios
+    }

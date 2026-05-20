@@ -1,0 +1,13 @@
+# Ignorar entornos y cachés
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+
+# Ignorar cuadernos de experimentación
+notebooks/
+
+# Ignorar datos crudos (Solo necesitamos los procesados para predecir)
+data/raw/
+*.csv
+DOCUMENTACION.docx
+.env

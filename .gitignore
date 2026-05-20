@@ -1,0 +1,21 @@
+# --- SEGURIDAD CRÍTICA ---
+.env
+
+# --- Caché de Python y Entornos ---
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# --- Logs de Auditoría ---
+logs/
+*.log
+
+# --- Jupyter Notebooks ---
+.ipynb_checkpoints/
+
+# --- Basura del Sistema / Binarios sueltos ---
+.DS_Store
+uvicorn
