@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 # Configurar ruta para que Python encuentre la carpeta 'src'
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 if str(BASE_DIR) not in sys.path:
     sys.path.append(str(BASE_DIR))
 
