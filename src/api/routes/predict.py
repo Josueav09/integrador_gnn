@@ -35,7 +35,11 @@ async def ejecutar_prediccion(
     
     return {
         "status": "success",
-        "agente_solicitante": token["user_id"], 
+        "agente_solicitante": token["user_id"],
+        "consulta": {
+            "fecha_consulta": consulta.fecha_consulta,
+            "distrito": consulta.distrito,
+        },
         "metricas_despliegue": {
             "hotspots_enviados_a_pnp": len(hotspots_prioritarios),
         },
