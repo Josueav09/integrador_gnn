@@ -47,12 +47,23 @@ async def lifespan(app: FastAPI):
     yield
     ml_models.clear()
 
+from fastapi.middleware.cors import CORSMiddleware
+
 # 2. Inicialización de FastAPI
 app = FastAPI(
     title="API - Sistema Predictivo Delictivo PNP",
     description="Motor de Inferencia Espaciotemporal con GNN protegido con JWT",
     version="2.0.0",
     lifespan=lifespan
+)
+
+# --- CONFIGURACIÓN DE CORS PARA EL FRONTEND ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://localhost:3000", "*"], # En prod cambiar "*" por los dominios reales
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # 3. REGISTRO DE MÓDULOS EN EL MONOLITO
