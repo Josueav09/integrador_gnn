@@ -1,23 +1,21 @@
 from sqlalchemy.orm import Session
+from src.core.models import Delito
 from src.repository.base import BaseRepository
-from sqlalchemy import text
 
-class CrimeRepository(BaseRepository):
+class CrimeRepository(BaseRepository[Delito]):
     """
     Repositorio específico para la tabla 'delitos'.
-    Manejará las consultas geoespaciales (PostGIS) requeridas por el Frontend.
+    Maneja las consultas geoespaciales y temporales mediante el ORM.
     """
-    def __init__(self, db: Session, model):
-        super().__init__(model, db)
+    def __init__(self, db: Session):
+        super().__init__(Delito, db)
 
     def get_delitos_por_fecha(self, fecha_inicio: str, fecha_fin: str):
         """
-        Ejemplo de consulta futura para el Frontend: 
-        Obtener delitos en un rango de fechas para pintar en el mapa de React.
+        Obtener delitos en un rango de fechas.
+        Retorna los objetos Delito mapeados por SQLAlchemy.
         """
-        query = text("""
-            SELECT id_delito, tipo_delito, latitud, longitud, fecha_hora 
-            FROM delitos 
-            WHERE fecha_hora BETWEEN :inicio AND :fin
-        """)
-        return self.db.execute(query, {"inicio": fecha_inicio, "fin": fecha_fin}).fetchall()
+        return self.db.query(self.model).filter(
+            self.model.fecha_delito >= fecha_inicio,
+            self.model.fecha_delito <= fecha_fin
+        ).all()

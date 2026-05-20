@@ -7,7 +7,8 @@ from src.services.gnn_service import GNNService
 router = APIRouter(prefix="/predict", tags=["Predicciones GNN"])
 
 class ConsultaPredictiva(BaseModel):
-    ventana_historica: list
+    fecha_consulta: str  # Formato 'YYYY-MM-DD'
+    distrito: str
 
 @router.post("/predecir")
 async def ejecutar_prediccion(
@@ -17,13 +18,15 @@ async def ejecutar_prediccion(
 ):
     """
     ENDPOINT CORE: Controlador limpio que delega la inferencia a la capa de Servicios.
+    Recibe parámetros de negocio, el backend construye el tensor internamente.
     """
     # Importamos las variables de memoria global
     from src.api.main import ml_models, hardware_device, UMBRAL_PNP
 
     # Delegamos el cálculo complejo al Servicio GNN
     hotspots_prioritarios = GNNService.ejecutar_inferencia(
-        ventana_historica=consulta.ventana_historica,
+        fecha_consulta=consulta.fecha_consulta,
+        distrito=consulta.distrito,
         top_k=top_k,
         umbral=UMBRAL_PNP,
         ml_models=ml_models,
@@ -37,4 +40,4 @@ async def ejecutar_prediccion(
             "hotspots_enviados_a_pnp": len(hotspots_prioritarios),
         },
         "hotspots": hotspots_prioritarios
-    }
+    }
