@@ -24,6 +24,7 @@ class GNNService:
     def ejecutar_inferencia(
         fecha_consulta: str, 
         distrito: str,
+        tipo_delito: str,
         top_k: int, 
         umbral: float, 
         ml_models: dict, 
@@ -59,13 +60,22 @@ class GNNService:
                 predicciones = modelo(x_input, edge_index, edge_weights)
                 predicciones_array = predicciones.squeeze(0).cpu().numpy()
             
-            # Nota: La activación Softplus en el modelo ya garantiza la no-negatividad, 
-            # eliminando la necesidad de np.maximum(predicciones_array, 0)
+            # Nota: La activación Softplus en el modelo ya garantiza la no-negatividad.
+            
+            # --- APROXIMACIÓN HEURÍSTICA DE INDEPENDENCIA CONDICIONAL (APF2) ---
+            # El modelo predice la "Temperatura Criminal" global. 
+            # Asumimos independencia condicional: P(Delito | Grilla) = P(Riesgo_Global) * P(Delito_Histórico)
+            probabilidad_condicional = 1.0
+            if tipo_delito == 'ROB-001':
+                probabilidad_condicional = 0.65  # Ponderador histórico Bayesiano para Robos
+            elif tipo_delito == 'HUR-001':
+                probabilidad_condicional = 0.35  # Ponderador histórico Bayesiano para Hurtos
             
             # 3. Lógica de Negocio (Semáforo Policial)
             alertas_grilla = []
             for nodo_id, score in enumerate(predicciones_array):
-                score_float = float(score)
+                # Aplicamos el filtro Bayesiano
+                score_float = float(score) * probabilidad_condicional
                 
                 if score_float < umbral:
                     estado_semaforo = "Verde"
@@ -75,9 +85,9 @@ class GNNService:
                     estado_semaforo = "Roja" 
                     
                 alertas_grilla.append({
-                    "id_nodo": nodo_id,
-                    "score_densidad_delictiva": score_float,
-                    "alerta_patrullaje": estado_semaforo
+                    "id_nodo": int(nodo_id),
+                    "score_densidad_delictiva": float(score_float),
+                    "alerta_patrullaje": str(estado_semaforo)
                 })
                 
             # 4. Filtrado Top-K
