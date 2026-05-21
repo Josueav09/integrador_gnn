@@ -4,8 +4,25 @@ API predictiva delictiva (FastAPI + GNN + JWT + PostGIS).
 
 ## Desarrollo local
 
+**Python 3.10–3.12** (igual que Docker):
+
 ```bash
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
+```
+
+**Python 3.13+** (ej. 3.14 en Windows): usar `requirements-local.txt` porque `torch==2.5.1` no publica wheels para esa versión.
+
+```bash
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements-local.txt
+```
+
+Luego:
+
+```bash
 cp .env.example .env
 # Configurar DATABASE_URL y ejecutar migraciones / seed según su entorno
 python src/utils/create_admin.py
