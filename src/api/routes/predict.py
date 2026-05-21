@@ -9,6 +9,7 @@ router = APIRouter(prefix="/predict", tags=["Predicciones GNN"])
 class ConsultaPredictiva(BaseModel):
     fecha_consulta: str  # Formato 'YYYY-MM-DD'
     distrito: str
+    tipo_delito: str = "TODOS" # ROB-001, HUR-001, TODOS
 
 @router.post("/predecir")
 async def ejecutar_prediccion(
@@ -27,6 +28,7 @@ async def ejecutar_prediccion(
     hotspots_prioritarios = GNNService.ejecutar_inferencia(
         fecha_consulta=consulta.fecha_consulta,
         distrito=consulta.distrito,
+        tipo_delito=consulta.tipo_delito,
         top_k=top_k,
         umbral=UMBRAL_PNP,
         ml_models=ml_models,
@@ -35,9 +37,9 @@ async def ejecutar_prediccion(
     
     return {
         "status": "success",
-        "agente_solicitante": token["user_id"], 
+        "agente_solicitante": int(token["user_id"]) if isinstance(token.get("user_id"), (int, float, str)) else str(token.get("user_id")), 
         "metricas_despliegue": {
-            "hotspots_enviados_a_pnp": len(hotspots_prioritarios),
+            "hotspots_enviados_a_pnp": int(len(hotspots_prioritarios)),
         },
         "hotspots": hotspots_prioritarios
     }

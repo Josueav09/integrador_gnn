@@ -200,3 +200,22 @@ class PrediccionCuadrante(Base):
 
     prediccion = relationship("Prediccion", back_populates="valores")
     cuadrante = relationship("Cuadrante", back_populates="predicciones_valores")
+
+
+# =============================================================================
+# BLOQUE 5: CROWDSOURCING Y DENUNCIAS CIUDADANAS (CUARENTENA)
+# =============================================================================
+
+class DenunciaCiudadana(Base):
+    __tablename__ = "denuncias_ciudadanas"
+
+    id_denuncia_ciudadana = Column(Integer, primary_key=True, autoincrement=True)
+    id_tipo_delito = Column(Integer, ForeignKey("tipos_delitos.id_tipo_delito", ondelete="RESTRICT"), nullable=False)
+    fecha_delito = Column(Date, nullable=False)
+    hora_delito = Column(Time, default=None)
+    ubicacion_exacta = Column(Geometry(geometry_type="POINT", srid=4326), nullable=False)
+    descripcion = Column(Text, default=None)
+    estado = Column(String(20), default="pendiente")
+    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    tipo_delito = relationship("TipoDelito")

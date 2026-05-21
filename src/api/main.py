@@ -13,7 +13,7 @@ if str(BASE_DIR) not in sys.path:
 from src.model.st_gnn import RedEspacioTemporal
 
 # --- IMPORTACIÓN DE LOS NUEVOS ROUTERS MODULARES ---
-from src.api.routes import auth, predict
+from src.api.routes import auth, predict, dashboard, denuncias
 # ---------------------------------------------------
 
 ml_models = {}
@@ -69,6 +69,8 @@ app.add_middleware(
 # 3. REGISTRO DE MÓDULOS EN EL MONOLITO
 app.include_router(auth.router)
 app.include_router(predict.router)
+app.include_router(dashboard.router)
+app.include_router(denuncias.router)
 
 @app.get("/")
 async def health_check():
