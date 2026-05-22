@@ -83,9 +83,12 @@ def aprobar_denuncia(id_denuncia: int, db: Session = Depends(get_db), current_us
     Aprueba una denuncia, calculando su cuadrante mediante PostGIS y moviéndola a la tabla oficial de delitos.
     """
     repo = DenunciaRepository(db)
-    denuncia_aprobada = repo.aprobar_denuncia(id_denuncia)
-    if not denuncia_aprobada:
-        raise HTTPException(status_code=404, detail="Denuncia no encontrada o ya procesada.")
+    try:
+        denuncia_aprobada = repo.aprobar_denuncia(id_denuncia)
+        if not denuncia_aprobada:
+            raise HTTPException(status_code=404, detail="Denuncia no encontrada o ya procesada.")
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
     
     # Registro de auditoría (quién aprobó la denuncia)
     # logger.info(f"Analista ID {current_user['user_id']} aprobó la denuncia ciudadana {id_denuncia}")

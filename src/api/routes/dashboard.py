@@ -9,41 +9,83 @@ from src.security.jwt_handler import get_current_user
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard KPIs"])
 
-# CACHÉ EN MEMORIA PARA EVITAR CUELLO DE BOTELLA POSTGIS
-_CACHE = {
-    "kpis": None,
-    "last_updated": None
-}
-CACHE_TTL_MINUTES = 5
+from cachetools import TTLCache
 
-async def _refresh_cache(db: Session):
-    """Actualiza el caché si expiró o está vacío"""
-    global _CACHE
-    now = datetime.now()
+# CACHÉ EN MEMORIA LRU: Evita saturación y memory leaks
+# Máximo 100 consultas diferentes, expiran en 5 minutos (300 segundos)
+dashboard_cache = TTLCache(maxsize=100, ttl=300)
+
+async def _refresh_cache(db: Session, anio: int = None):
+    """Obtiene KPIs, apoyándose en la caché LRU automáticamente"""
+    cache_key = f"kpis_{anio if anio else 'todos'}"
     
-    if _CACHE["kpis"] is None or _CACHE["last_updated"] is None or \
-       (now - _CACHE["last_updated"]) > timedelta(minutes=CACHE_TTL_MINUTES):
+    if cache_key in dashboard_cache:
+        return dashboard_cache[cache_key], True
         
-        # Simular retardo si es necesario o ejecutar asincrónicamente
-        repo = DashboardRepository(db)
-        # En producción con alta carga, esto se ejecutaría en un background task
-        # o celery worker, pero este in-memory cache protege la DB de N peticiones simultáneas.
-        kpis = repo.get_kpis()
-        
-        _CACHE["kpis"] = kpis
-        _CACHE["last_updated"] = now
-        
-    return _CACHE["kpis"]
+    repo = DashboardRepository(db)
+    kpis = repo.get_kpis(anio=anio)
+    
+    dashboard_cache[cache_key] = kpis
+    return kpis, False
 
 @router.get("/kpis")
-async def get_dashboard_kpis(db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+async def get_dashboard_kpis(
+    anio: int = None,
+    db: Session = Depends(get_db), 
+    current_user: dict = Depends(get_current_user)
+):
     """
-    Retorna los KPIs centrales del Dashboard.
-    Utiliza un caché en memoria de 5 minutos para evitar sobrecargar PostGIS.
+    Retorna los KPIs centrales del Dashboard filtrados por año.
+    Utiliza TTLCache para evitar sobrecargar PostGIS.
     """
-    data = await _refresh_cache(db)
+    data, from_cache = await _refresh_cache(db, anio)
     return {
         "success": True,
-        "data": data,
-        "cached_at": _CACHE["last_updated"].isoformat() if _CACHE["last_updated"] else None
+        "from_cache": from_cache,
+        "data": data
+    }
+
+@router.get("/mapa-geojson")
+def get_mapa_geojson(db: Session = Depends(get_db)):
+    """
+    Retorna los puntos geográficos en tiempo real desde la BD PostGIS
+    con coordenadas exactas (Lat/Lng) en lugar de una grilla agregada.
+    """
+    repo = DashboardRepository(db)
+    puntos = repo.get_mapa_geojson()
+    return {
+        "success": True,
+        "data": puntos
+    }
+
+@router.get("/analisis")
+async def get_dashboard_analisis(
+    anio: int = None,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Retorna datos de análisis avanzados formateados en DTOs para Recharts.
+    """
+    repo = DashboardRepository(db)
+    data = repo.get_analisis(anio=anio)
+    return {
+        "success": True,
+        "data": data
+    }
+
+@router.get("/stats-distrito/{distrito}")
+async def get_stats_distrito(
+    distrito: str,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Retorna las estadísticas delictivas para un distrito específico.
+    """
+    repo = DashboardRepository(db)
+    data = repo.get_stats_distrito(distrito)
+    return {
+        "success": True,
+        "data": data
     }

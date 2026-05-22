@@ -43,3 +43,12 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
             headers={"WWW-Authenticate": "Bearer"},
         )
     return payload
+
+def get_current_admin_or_investigator(payload: dict = Depends(get_current_user)) -> dict:
+    rol = payload.get("rol", "").lower()
+    if rol not in ["administrador", "investigador", "1", "3"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Operación no permitida para su rol. Requiere Administrador o Investigador."
+        )
+    return payload

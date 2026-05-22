@@ -22,7 +22,19 @@ class DenunciaRepository:
         return nueva_denuncia
 
     def get_denuncias_pendientes(self):
-        return self.db.query(DenunciaCiudadana).filter(DenunciaCiudadana.estado == "pendiente").all()
+        denuncias = self.db.query(DenunciaCiudadana).filter(DenunciaCiudadana.estado == "pendiente").all()
+        # Transformamos la data para que sea JSON serializable (evitando el WKBElement de ubicacion_exacta)
+        resultado = []
+        for d in denuncias:
+            resultado.append({
+                "id_denuncia_ciudadana": d.id_denuncia_ciudadana,
+                "id_tipo_delito": d.id_tipo_delito,
+                "fecha_delito": str(d.fecha_delito),
+                "hora_delito": str(d.hora_delito) if d.hora_delito else None,
+                "descripcion": d.descripcion,
+                "estado": d.estado
+            })
+        return resultado
 
     def aprobar_denuncia(self, id_denuncia: int):
         denuncia = self.db.query(DenunciaCiudadana).filter(DenunciaCiudadana.id_denuncia_ciudadana == id_denuncia).first()
@@ -38,7 +50,14 @@ class DenunciaRepository:
             text(f"ST_Contains(geometria_poligono, ST_GeomFromWKB(:geom, 4326))")
         ).params(geom=denuncia.ubicacion_exacta.data).first()
 
-        id_cuadrante = cuadrante.id_cuadrante if cuadrante else 1 # Fallback al cuadrante 1 si cae fuera del mapa exacto (solo por robustez en demos)
+        if cuadrante:
+            id_cuadrante = cuadrante.id_cuadrante
+        else:
+            # Fallback al primer cuadrante existente
+            primer_cuadrante = self.db.query(Cuadrante).first()
+            if not primer_cuadrante:
+                raise ValueError("Error PostGIS: No existen Cuadrantes en la Base de Datos. No se puede guardar el delito sin un cuadrante espacial.")
+            id_cuadrante = primer_cuadrante.id_cuadrante
 
         # Trasladar a tabla oficial Delitos
         nuevo_delito = Delito(
