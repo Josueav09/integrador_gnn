@@ -1,8 +1,9 @@
 import urllib.request
 import json
 import sys
+import os
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = os.getenv("API_URL", "http://localhost:8000").rstrip("/")
 
 def login():
     url = f"{BASE_URL}/auth/login"
