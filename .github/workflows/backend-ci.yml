@@ -1,0 +1,45 @@
+name: Backend CI (FastAPI & GNN)
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # Definimos las variables de entorno necesarias para la ejecución de las pruebas.
+    # En un entorno de producción real en GitHub, se recomienda usar GitHub Secrets:
+    # DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    env:
+      DATABASE_URL: "postgresql://postgres.zoehmypmvvqludsakifg:integradorGNN12345!@aws-1-us-east-1.pooler.supabase.com:5432/postgres"
+      SECRET_KEY: "pnppredictivo_secreto_super_seguro_2026"
+      EMAIL_USER: "josueabrahm.av@gmail.com"
+      EMAIL_PASSWORD: "mrpdawkzzytdifzh"
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip' # Cachea dependencias para acelerar ejecuciones futuras
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # Instalamos pytest y httpx para poder correr las pruebas de verificación
+          pip install pytest httpx pytest-asyncio
+
+      - name: Run system verification tests
+        run: |
+          python tests/verify_system.py
+
+      - name: Run pytest test suite
+        run: |
+          pytest tests/
