@@ -18,7 +18,7 @@ API_URL = os.getenv("API_URL", "http://127.0.0.1:8000").rstrip("/")
 print(f"Enviando petición HTTP POST al Monolito FastAPI en {API_URL}...")
 # Pedimos explícitamente el Top 5 para probar la lógica contra la Fatiga de Alarma
 inicio = time.time()
-respuesta = requests.post(f"{API_URL}/predecir?top_k=5", json=payload)
+respuesta = requests.post(f"{API_URL}/predict/predecir?top_k=5", json=payload)
 fin = time.time()
 
 latencia_ms = (fin - inicio) * 1000
