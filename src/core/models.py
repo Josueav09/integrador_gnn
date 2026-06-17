@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text, Numeric, Date, Time, JSON, func
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text, Numeric, Date, Time, JSON, func, Boolean
 from sqlalchemy.orm import relationship
 from geoalchemy2 import Geometry
 from src.core.database import Base
@@ -39,6 +39,16 @@ class Usuario(Base):
     modelos = relationship("ModeloGNN", back_populates="usuario")
     predicciones = relationship("Prediccion", back_populates="usuario")
 
+
+class CodigoRecuperacion(Base):
+    __tablename__ = "codigos_recuperacion"
+    
+    id_codigo = Column(Integer, primary_key=True, index=True)
+    email_usuario = Column(String(150), ForeignKey("sistema_usuarios.email_usuario_sistema", ondelete="CASCADE"), nullable=False)
+    pin_recuperacion = Column(String(6), nullable=False)
+    fecha_expiracion = Column(DateTime(timezone=True), nullable=False)
+    usado = Column(Boolean, default=False)
+    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
 
 class Configuracion(Base):
     __tablename__ = "sistema_configuraciones"
@@ -200,3 +210,22 @@ class PrediccionCuadrante(Base):
 
     prediccion = relationship("Prediccion", back_populates="valores")
     cuadrante = relationship("Cuadrante", back_populates="predicciones_valores")
+
+
+# =============================================================================
+# BLOQUE 5: CROWDSOURCING Y DENUNCIAS CIUDADANAS (CUARENTENA)
+# =============================================================================
+
+class DenunciaCiudadana(Base):
+    __tablename__ = "denuncias_ciudadanas"
+
+    id_denuncia_ciudadana = Column(Integer, primary_key=True, autoincrement=True)
+    id_tipo_delito = Column(Integer, ForeignKey("tipos_delitos.id_tipo_delito", ondelete="RESTRICT"), nullable=False)
+    fecha_delito = Column(Date, nullable=False)
+    hora_delito = Column(Time, default=None)
+    ubicacion_exacta = Column(Geometry(geometry_type="POINT", srid=4326), nullable=False)
+    descripcion = Column(Text, default=None)
+    estado = Column(String(20), default="pendiente")
+    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    tipo_delito = relationship("TipoDelito")
