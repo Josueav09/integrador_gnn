@@ -1,8 +1,9 @@
 import requests
 import random
 import time
+import os
 
-API_URL = "http://localhost:8000"
+API_URL = os.getenv("API_URL", "http://localhost:8000").rstrip("/")
 
 def simular_peticion_frontend():
     print("=== INICIANDO SIMULACIÓN DE CLIENTE (FRONTEND) ===")

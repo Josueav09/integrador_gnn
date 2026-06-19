@@ -2,6 +2,7 @@ fastapi==0.104.1
 uvicorn==0.24.0
 pydantic==2.5.2
 numpy==1.26.2
+shapely==2.0.2
 # Instalamos la versión CPU de PyTorch por defecto para que el contenedor
 # sea ligero y corra en CUALQUIER computadora (Windows, Mac, Linux).
 --extra-index-url https://download.pytorch.org/whl/cpu
@@ -16,3 +17,6 @@ python-dotenv==1.0.0
 SQLAlchemy==2.0.23
 psycopg2-binary==2.9.9
 GeoAlchemy2==0.14.3
+email-validator==2.1.0
+cachetools==5.3.3
+python-multipart==0.0.18

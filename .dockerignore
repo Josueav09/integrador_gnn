@@ -10,4 +10,7 @@ notebooks/
 data/raw/
 *.csv
 DOCUMENTACION.docx
+.venv/
 .env
+.git/
+.gitignore

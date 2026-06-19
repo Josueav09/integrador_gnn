@@ -20,6 +20,10 @@ class Settings:
     
     # Parámetros del Negocio / Inteligencia Artificial
     UMBRAL_PNP: float = 0.0007
+    
+    # Configuración SMTP
+    EMAIL_USER: str = os.getenv("EMAIL_USER", "tu_correo@gmail.com")
+    EMAIL_PASSWORD: str = os.getenv("EMAIL_PASSWORD", "tu_app_password")
 
     # Configuración SMTP
     EMAIL_USER: str = os.getenv("EMAIL_USER", "tu_correo@gmail.com")

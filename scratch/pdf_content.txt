@@ -1,0 +1,769 @@
+ 
+ 
+Consigna para AVANCE DE PROYECTO FINAL 2 
+ 
+1. Logro a evaluar:  
+Al finalizar la unidad, el estudiante ejecuta el despliegue inicial de la solución 
+informática, considerando la integración con una base de datos, la aplicación de 
+controles de seguridad y la verificación de los requerimientos desarrollados. 
+ 
+2. Indicación general: 
+Deberán trabajar en el desarrollo de su proyecto de software en la empresa 
+elegida. Para este avance, incorporarán el uso de una base de datos y aplicarán 
+controles de seguridad en su solución. Así mismo, se validará el servicio según 
+los requerimientos desarrollados y se desplegará en la nube la primera versión de 
+su solución. 
+ 
+3. Indicaciones específicas: 
+La evaluación es grupal. Los estudiantes entregarán un informe escrito (en 
+formato MS Word) y sustentarán su proyecto de manera oral y con apoyo de 
+diapositivas. La entrega es a través de la plataforma virtual de aprendizaje   y 
+debe incluir: 
+• Informe de avance en formato MS Word 
+• Presentación de su exposición en formato PPT u otro formato de 
+presentación de diapositivas 
+• Revisar el Anexo donde encontrarás la estructura del informe.  
+El informe escrito deberá contener los siguientes artefactos: 
+Item Artefacto Descripción 
+1 Diseño físico de base de 
+datos  
+ 
+Se elaborará el modelo físico de la base de 
+datos junto con el script SQL para su 
+creación. Incluye diagrama físico de base 
+de datos y Script SQL 
+
+2 Informe de 
+Administración y 
+Replicación 
+ 
+Se incluirá un documento donde los 
+estudiantes explican cómo aplicarían la 
+replicación, respaldo y buenas prácticas de 
+administración de la base de datos. Incluye: 
+Motor de base de datos usado, tipo de 
+replicación propuesta, justificación técnica, 
+diagrama de arquitectura 
+3 Implementación del 
+Patrón de Acceso a 
+Datos 
+Se desarrollará e integra un módulo o clase 
+que implemente un patrón de diseño de 
+acceso a datos (por ejemplo: DAO, 
+Repository, etc.) en su proyecto. Incluye 
+diagrama de clases del patrón de diseño 
+aplicado en su proyecto, código fuente del 
+patrón y justificación técnica 
+4 Catálogo de Controles de 
+Seguridad del Proyecto 
+Se incluirá la lista de controles de 
+seguridad a aplicar al sistema, alineados a 
+buenas prácticas (ISO 27001, OWASP, 
+NIST, etc.) 
+5 Módulo de Autenticación 
+y Autorización 
+Implementado 
+Se desarrollará e integrará un módulo de 
+login seguro con control de acceso basado 
+en roles o permisos dentro de su 
+aplicación. Incluye evidencias del 
+formulario de autenticación, gestión segura 
+de credenciales, control de autorización, 
+gestión de sesiones o tokens, enlace al 
+código fuente y justificación técnica 
+6 Informe Técnico de 
+Seguridad, Cifrado de 
+Datos 
+Se detallarán las medidas de seguridad 
+implementadas en el proyecto, 
+enfocándose en cifrado, confidencialidad y 
+trazabilidad. Incluye mecanismos de cifrado 
+usado en el proyecto (p.e. AED, RSA, 
+SSL/TLS, etc.), mecanismos de trazabilidad 
+empleados (p. e. logs, auditoría, 
+seguimiento de usuarios, etc.), referencia a 
+ 
+estándares o buenas prácticas utilizadas y 
+justificación técnica. 
+7 Prueba de seguridad web Se incluirán reportes de verificación de 
+seguridad web sobre su aplicación, 
+identificando vulnerabilidades comunes y 
+proponiendo medidas de mitigación. Se 
+hace uso de una herramienta de escaneo 
+de vulnerabilidades y pen testing con Kali 
+Linux 
+8 Plan de pruebas del 
+sistema 
+Se definirá el alcance, enfoque, recursos, 
+cronograma y especificación de casos de 
+prueba del sistema, en relación con los 
+requerimientos funcionales y no 
+funcionales. Se utilizan plantillas de prueba 
+estructuradas (a criterio del docente) 
+9 Manual de despliegue Se incluirá un documento técnico que 
+describa de forma detallada el proceso de 
+despliegue del sistema en una plataforma 
+cloud, indicando los pasos, herramientas, y 
+configuraciones necesarias para replicarlo 
+a futuro. Incluye descripción del entorno 
+cloud elegido, herramientas necesarias, 
+dependencias, configuraciones previas y 
+pasos del despliegue. 
+10 Evidencia de pruebas de 
+despliegue 
+Se incluirá un documento donde se 
+registren las pruebas de validación del 
+despliegue realizadas, tomando como base 
+los pasos descritos en el manual de 
+despliegue. Incluye capturas de pantalla del 
+sistema en funcionamiento en la plataforma 
+cloud elegida. 
+ 
+ 
+ 
+La sustentación oral se realizará en el ambiente asignado a las clases del curso. 
+Para su ejecución se deberá tener en cuenta los siguientes aspectos: 
+• Todos los integrantes deberán participar en la sustentación. 
+• La calificación es individual. 
+• La sustentación deberá iniciar con el levantamiento de las observaciones o 
+aspectos de mejora realizados a la APF1. 
+• Cada integrante deberá exponer sus principales aportes al proyecto. 
+• Ningún integrante deberá repetir la exposición de otro integrante. 
+• Se expondrá el proyecto, siguiendo un orden lógico y demostrando 
+capacidad de síntesis. 
+• Se demostrará el dominio del tema, argumentando y sustentando el 
+proyecto. 
+• Se evidenciará la aplicación en ejecución en una plataforma cloud. 
+ 
+4. Recomendaciones 
+● Coordinarás con tu docente la viabilidad de tu proyecto antes de 
+empezarlo a desarrollar. 
+● Asistirás a todas las sesiones y presentarás todas las actividades previas a 
+la entrega del informe para obtener retroalimentación. 
+● Tomarás nota de toda la retroalimentación y realizarás las correcciones 
+necesarias indicadas por el docente. 
+● Revisarás el material de la clase y tus anotaciones antes de elaborar el 
+informe. 
+● Consultarás el material complementario del curso. 
+ 
+5. Criterios de evaluación 
+A continuación, podrás encontrar la rúbrica de evaluación con la que será 
+evaluada la actividad. Recuerda que también puedes encontrarla en la plataforma 
+virtual de aprendizaje. Asegúrate de leerla antes de realizar la actividad. 
+ 
+ 
+ 
+ 
+ 
+ 
+A tomar en cuenta en caso de plagio:  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+“Todo acto de copiar, intentarlo o dejar copiar, durante una prueba, examen, 
+práctica, trabajo o cualquier asignación académica, usando tanto el medio físico 
+como el electrónico, se encuentra normado en el Reglamento de Estudios y el 
+Reglamento de Disciplina del Estudiante vigentes en el Portal de Transparencia 
+y/o en el Portal del Estudiante”. 
+ 
+RÚBRICA DE AVANCE DE PROYECTO FINAL 2 
+ 
+Criterio 
+ 
+Definición del criterio 
+ 
+Estándar esperado 
+ 
+En proceso 2 
+ 
+En proceso 1 
+ 
+Inicial 
+ 
+Integración con 
+base de datos 
+Se califica que el 
+estudiante implemente 
+la integración con la 
+base de datos de 
+manera coherente con 
+los requerimientos del 
+sistema, asegurando 
+consultas, operaciones 
+y replicación 
+correctamente 
+configuradas. 
+Implementa la integración 
+con la base de datos de 
+manera coherente con los 
+requerimientos del 
+sistema, asegurando 
+consultas, operaciones y 
+replicación correctamente 
+configuradas considerando 
+los siguientes elementos:                             
+1) Informe de 
+Administración y 
+Replicación  
+2) Diseño físico de base de 
+datos 
+3) Implementación del 
+Patrón de Acceso a Datos                     
+4) Consistencia entre el 
+modelo de base de datos y 
+el script SQL 
+Implementa la integración 
+con la base de datos de 
+manera coherente con los 
+requerimientos del 
+sistema, asegurando 
+consultas, operaciones y 
+replicación correctamente 
+configuradas considerando 
+3 de los siguientes 
+elementos:                       
+1) Informe de 
+Administración y 
+Replicación  
+2) Diseño físico de base de 
+datos 
+3) Implementación del 
+Patrón de Acceso a Datos                           
+4) Consistencia entre el 
+modelo de base de datos y 
+el script SQL 
+Implementa la integración 
+con la base de datos de 
+manera coherente con los 
+requerimientos del 
+sistema, asegurando 
+consultas, operaciones y 
+replicación correctamente 
+configuradas considerando 
+2 de los siguientes 
+elementos:                      1) 
+Informe de Administración 
+y Replicación  
+2) Diseño físico de base de 
+datos 
+3) Implementación del 
+Patrón de Acceso a Datos                        
+4) Consistencia entre el 
+modelo de base de datos y 
+el script SQL 
+Implemente la integración 
+con la base de datos de 
+manera coherente con los 
+requerimientos del 
+sistema, asegurando 
+consultas, operaciones y 
+replicación correctamente 
+configuradas considerando 
+1 de los siguientes 
+elementos:                 1) 
+Informe de Administración 
+y Replicación  
+2) Diseño físico de base de 
+datos 
+3) Implementación del 
+Patrón de Acceso a Datos                       
+4) Consistencia entre el 
+modelo de base de datos y 
+el script SQL 
+4 3 2 1 
+ 
+Criterio 
+ 
+Definición del criterio 
+ 
+Estándar esperado 
+ 
+En proceso 2 
+ 
+En proceso 1 
+ 
+Inicial 
+ 
+Medidas de 
+Seguridad para 
+la aplicación 
+Se califica que el 
+estudiante emplee 
+medidas de seguridad 
+pertinentes para 
+proteger la aplicación, 
+considerando 
+configuraciones, 
+controles y prácticas 
+que garanticen la 
+confidencialidad, 
+integridad y 
+disponibilidad de la 
+información en la 
+elaboración de los 
+artefactos. 
+Emplea medidas de 
+seguridad pertinentes para 
+proteger la aplicación, 
+considerando 
+configuraciones, controles 
+y prácticas que garanticen 
+la confidencialidad, 
+integridad y disponibilidad 
+de la información en la 
+elaboración de los 
+siguientes artefactos: 
+1) Módulo de Autenticación 
+y Autorización 
+Implementado 
+2) Informe Técnico de 
+Seguridad, Cifrado de 
+Datos 
+3) Prueba de seguridad 
+web 
+4) Catálogo de Controles 
+de Seguridad del Proyecto 
+Emplea medidas de 
+seguridad pertinentes para 
+proteger la aplicación, 
+considerando 
+configuraciones, controles 
+y prácticas que garanticen 
+la confidencialidad, 
+integridad y disponibilidad 
+de la información en la 
+elaboración de 3 de los 
+siguientes artefactos: 
+1) Módulo de Autenticación 
+y Autorización 
+Implementado 
+2) Informe Técnico de 
+Seguridad, Cifrado de 
+Datos 
+3) Prueba de seguridad 
+web 
+4) Catálogo de Controles 
+de Seguridad del Proyecto 
+Emplea medidas de 
+seguridad pertinentes para 
+proteger la aplicación, 
+considerando 
+configuraciones, controles 
+y prácticas que garanticen 
+la confidencialidad, 
+integridad y disponibilidad 
+de la información en la 
+elaboración de 2 de los 
+siguientes artefactos: 
+1) Módulo de Autenticación 
+y Autorización 
+Implementado 
+2) Informe Técnico de 
+Seguridad, Cifrado de 
+Datos 
+3) Prueba de seguridad 
+web 
+4) Catálogo de Controles 
+de Seguridad del Proyecto 
+Emplea medidas de 
+seguridad pertinentes para 
+proteger la aplicación, 
+aplicando configuraciones, 
+controles y prácticas que 
+garanticen la 
+confidencialidad, integridad 
+y disponibilidad de la 
+información elaborando 1 
+de los siguientes 
+artefactos: 
+1) Módulo de Autenticación 
+y Autorización 
+Implementado 
+2) Informe Técnico de 
+Seguridad, Cifrado de 
+Datos 
+3) Prueba de seguridad 
+web 
+4) Catálogo de Controles 
+de Seguridad del Proyecto 
+4 3 2 1 
+Despliegue de 
+la aplicación 
+Se califica que el 
+estudiante realice el 
+despliegue de la 
+aplicación de forma 
+funcional y 
+estructurada, aplicando 
+Realiza el despliegue de la 
+aplicación de forma 
+funcional y estructurada, 
+aplicando configuraciones 
+y procedimientos que 
+aseguren un 
+Realiza el despliegue de la 
+aplicación de forma 
+funcional y estructurada, 
+aplicando configuraciones 
+y procedimientos que 
+aseguren un 
+Realiza el despliegue de la 
+aplicación de forma 
+funcional y estructurada, 
+aplicando configuraciones 
+y procedimientos que 
+aseguren un 
+Realiza el despliegue de la 
+aplicación de forma 
+funcional y estructurada, 
+aplicando configuraciones 
+y procedimientos que 
+aseguren un 
+Criterio 
+ 
+Definición del criterio 
+ 
+Estándar esperado 
+ 
+En proceso 2 
+ 
+En proceso 1 
+ 
+Inicial 
+ 
+configuraciones y 
+procedimientos que 
+aseguren un 
+funcionamiento estable 
+en el entorno definido 
+elaborando los 
+artefactos. 
+                         
+ 
+funcionamiento estable en 
+el entorno definido 
+elaborando los siguientes 
+artefactos: 
+1) Plan de pruebas del 
+sistema 
+2) Manual de despliegue 
+3) Evidencia de pruebas 
+de despliegue                        
+4) Evidencias de monitoreo 
+y administración de base 
+de datos 
+funcionamiento estable en 
+el entorno definido 
+elaborando 3 de los 
+siguientes artefactos: 
+1) Plan de pruebas del 
+sistema 
+2) Manual de despliegue 
+3) Evidencia de pruebas 
+de despliegue                        
+4) Evidencias de monitoreo 
+y administración de base 
+de datos 
+funcionamiento estable en 
+el entorno definido 
+elaborando 2 de los 
+siguientes artefactos: 
+1) Plan de pruebas del 
+sistema 
+2) Manual de despliegue 
+3) Evidencia de pruebas 
+de despliegue                        
+4) Evidencias de monitoreo 
+y administración de base 
+de datos 
+funcionamiento estable en 
+el entorno definido 
+elaborando 1 de los 
+siguientes artefactos: 
+1) Plan de pruebas del 
+sistema 
+2) Manual de despliegue 
+3) Evidencia de pruebas 
+de despliegue                         
+4) Evidencias de monitoreo 
+y administración de base 
+de datos 
+4 3 2 1 
+Validación y 
+Verificación del 
+Sistema en la 
+Plataforma 
+Cloud 
+Se califica que el 
+estudiante valide el 
+funcionamiento del 
+sistema considerando 
+los aspectos de 
+seguridad, integración 
+de base de datos y el 
+despliegue de la 
+solución informática. 
+Realiza una validación 
+precisa en la plataforma 
+Cloud del funcionamiento 
+del sistema considerando 
+los aspectos de seguridad, 
+e integración de base de 
+datos según el plan de 
+pruebas. 
+Realiza una validación 
+adecuada en la plataforma 
+Cloud del funcionamiento 
+del sistema considerando 
+los aspectos de seguridad, 
+e integración de base de 
+datos. 
+Realiza una validación en 
+la plataforma Cloud del 
+funcionamiento del sistema 
+considerando algunos de 
+los aspectos de seguridad 
+e integración de base de 
+datos. 
+Realiza una validación del 
+funcionamiento del sistema 
+considerando algunos de 
+los aspectos de seguridad 
+e integración de base de 
+datos. 
+2 1.5 1 0.5 
+ 
+Criterio 
+ 
+Definición del criterio 
+ 
+Estándar esperado 
+ 
+En proceso 2 
+ 
+En proceso 1 
+ 
+Inicial 
+ 
+Sustentación 
+Se califica que el 
+estudiante argumente 
+su proyecto con 
+claridad, coherencia 
+técnica y dominio 
+conceptual, explicando 
+las decisiones tomadas 
+en cada fase del 
+desarrollo. 
+Argumenta el proyecto con 
+claridad, coherencia 
+técnica y dominio 
+conceptual, explicando las 
+decisiones tomadas en 
+cada fase del desarrollo 
+cumpliendo las 
+indicaciones indicadas:                  
+1) Se expone los 
+principales aportes al 
+proyecto 
+2) Se sigue un orden 
+lógico, coherente y con 
+capacidad de síntesis 
+3) Se demuestra dominio 
+del tema, argumentando y 
+sustentando los artefactos 
+elaborados 
+4) Se muestra el 
+funcionamiento del sistema 
+en una plataforma cloud 
+Argumenta el proyecto con 
+claridad, coherencia 
+técnica y dominio 
+conceptual, explicando las 
+decisiones tomadas en 
+cada fase del desarrollo 
+cumpliendo 3 de las 
+indicaciones indicadas:              
+1) Se expone los 
+principales aportes al 
+proyecto 
+2) Se sigue un orden 
+lógico, coherente y con 
+capacidad de síntesis 
+3) Se demuestra dominio 
+del tema, argumentando y 
+sustentando los artefactos 
+elaborados 
+4) Se muestra el 
+funcionamiento del sistema 
+en una plataforma cloud 
+Argumenta el proyecto con 
+claridad, coherencia 
+técnica y dominio 
+conceptual, explicando las 
+decisiones tomadas en 
+cada fase del desarrollo 
+cumpliendo 2 de las 
+indicaciones indicadas:                 
+1) Se expone los 
+principales aportes al 
+proyecto 
+2) Se sigue un orden 
+lógico, coherente y con 
+capacidad de síntesis 
+3) Se demuestra dominio 
+del tema, argumentando y 
+sustentando los artefactos 
+elaborados 
+4) Se muestra el 
+funcionamiento del sistema 
+en una plataforma cloud 
+Argumenta el proyecto con 
+claridad, coherencia 
+técnica y dominio 
+conceptual, explicando las 
+decisiones tomadas en 
+cada fase del desarrollo 
+cumpliendo 1 de las 
+indicaciones indicadas:             
+1) Se expone los 
+principales aportes al 
+proyecto 
+2) Se sigue un orden 
+lógico, coherente y con 
+capacidad de síntesis 
+3) Se demuestra dominio 
+del tema, argumentando y 
+sustentando los artefactos 
+elaborados 
+4) Se muestra el 
+funcionamiento del sistema 
+en una plataforma cloud 
+2 1.5 1 0.5 
+Levantamiento 
+de 
+Observaciones  
+Se califica que el 
+estudiante realice el 
+levantamiento de todas 
+las observaciones 
+realizadas en el Avance 
+de proyecto Final 1. 
+Realiza el levantamiento 
+del 100% de todas las 
+observaciones realizadas 
+en el Avance de proyecto 
+Final 1 
+Realiza el levantamiento 
+del 80% de todas las 
+observaciones realizadas 
+en el Avance de proyecto 
+Final 1 
+Realiza el levantamiento 
+del 50% de todas las 
+observaciones realizadas 
+en el Avance de proyecto 
+Final 1 
+Realiza el levantamiento 
+del 30% de todas las 
+observaciones realizadas 
+en el Avance de proyecto 
+Final 1 
+4 3 2 1 
+ 
+Anexo. Estructura del informe 
+ 
+El informe escrito debe tener la siguiente estructura 
+1. Análisis Empresarial 
+a. Introducción 
+b. Descripción de la empresa 
+c. Visión 
+d. Misión 
+e. Análisis de Negocio (Lean Canvas) 
+f. Mapa de Procesos (AS-IS) 
+g. Oportunidades de mejora y modelo propuesto (TO-BE) 
+2. Planificación y Gestión del Proyecto 
+a. Project Charter 
+b. Alcance y objetivos del proyecto 
+c. Cronograma del proyecto (Diagrama de Gantt) 
+d. Planificación ágil – Sprint Planning 
+e. Roles y artefactos Scrum 
+f. Tablero Kanban/Scrum 
+g. Product Backlog 
+h. Historias de usuario 
+3. Selección y Configuración de Herramientas de desarrollo 
+a. Selección de herramientas 
+b. Evidencias de configuración de herramientas 
+c. Repositorio GitHub 
+i. Estructura del repositorio 
+ii. Archivo README.md 
+4. Prototipos 
+a. Wireframes de baja fidelidad 
+b. Mockups de alta fidelidad 
+c. Principios y buenas prácticas UX/UI aplicadas 
+d. Navegación y flujo de interacción del usuario 
+5. Gestión de riesgos del proyecto 
+a. Identificación de riesgos 
+b. Mapa de riesgos (Matriz de Probabilidad–Impacto + Heatmap) 
+c. Plan de gestión de riesgos 
+i. Estrategias de mitigación y respuesta 
+ 
+ii. Seguimiento y control de riesgos 
+6. Definición de Métricas y Niveles de Servicio 
+a. Identificación de KPIs y métricas del sistema 
+b. Definición de SLA (Service Level Agreement) y SLO (Service Level Objective) 
+c. Plan de Medición y Monitoreo 
+i. Herramientas de monitoreo utilizadas 
+ii. Métricas recolectadas 
+7. Desarrollo e Implementación Técnica 
+a. Arquitectura general del sistema 
+b. Estructura del código fuente 
+c. Código optimizado y evidencia técnica 
+d. Estrategias WPO 
+i. Métricas antes y después de la optimización 
+ii. Estrategias implementadas 
+8. Implementación y Administración de Base de Datos 
+a. Diseño físico de base de datos 
+b. Informe de Administración y Replicación 
+i. Estrategia de respaldo y replicación 
+ii. Configuración de alta disponibilidad 
+iii. Evidencias de monitoreo y administración 
+c. Implementación del Patrón de Acceso a Datos 
+i. Patrón de Acceso a Datos elegido 
+ii. Diagrama de clases de muestra de uso del patrón 
+iii. Ejemplo de código implementado 
+9. Seguridad del Sistema 
+a. Catálogo de controles de seguridad 
+b. Módulo de Autenticación y Autorización implementado 
+c. Informe Técnico de Seguridad y Cifrado de Datos 
+d. Pruebas de seguridad web 
+i. Metodología empleada 
+ii. Resultados y vulnerabilidades detectadas 
+iii. Acciones correctivas y recomendaciones 
+10. Validación y Verificación del Sistema 
+a. Plan de pruebas del sistema 
+b. Evidencias de pruebas del sistema 
+ 
+11. Despliegue 
+a. Manual de despliegue 
+b. Evidencia de pruebas de despliegue 
+  Anexos 
+• A. Script SQL y archivos de configuración de base de datos 
+• B. Fragmentos de código fuente relevantes 
+• C. Reportes automatizados de pruebas 
+• D. Reportes automatizados de seguridad 
+  Referencias Bibliográficas 
+ 
+ 
