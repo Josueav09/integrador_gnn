@@ -1,0 +1,28 @@
+=== EJECUTANDO CERTIFICACION DE SEGURIDAD INTERNA ===
+2026-06-18 23:12:59 | [INFO] | Intento de acceso detectado para el usuario: no_existe_agente@pnp.gob.pe desde IP: testclient
+2026-06-18 23:13:01 | [WARNING] | Intento fallido: El correo no_existe_agente@pnp.gob.pe no existe.
+2026-06-18 23:13:01 | [INFO] | Intento de acceso detectado para el usuario: no_existe_agente@pnp.gob.pe desde IP: testclient
+2026-06-18 23:13:01 | [WARNING] | Intento fallido: El correo no_existe_agente@pnp.gob.pe no existe.
+2026-06-18 23:13:01 | [INFO] | Intento de acceso detectado para el usuario: no_existe_agente@pnp.gob.pe desde IP: testclient
+2026-06-18 23:13:01 | [WARNING] | Intento fallido: El correo no_existe_agente@pnp.gob.pe no existe.
+2026-06-18 23:13:02 | [INFO] | Intento de acceso detectado para el usuario: no_existe_agente@pnp.gob.pe desde IP: testclient
+2026-06-18 23:13:02 | [WARNING] | Intento fallido: El correo no_existe_agente@pnp.gob.pe no existe.
+2026-06-18 23:13:02 | [INFO] | Intento de acceso detectado para el usuario: no_existe_agente@pnp.gob.pe desde IP: testclient
+2026-06-18 23:13:02 | [WARNING] | Intento fallido: El correo no_existe_agente@pnp.gob.pe no existe.
+2026-06-18 23:13:02 | [CRITICAL] | DEFENSA ACTIVA: IP testclient bloqueada por fuerza bruta (Mx. 5 intentos).
+2026-06-18 23:13:02 | [WARNING] | Ataque mitigado: IP testclient bloqueada por 15 minutos ms.
+[OK] Confirmado: Bloqueo de fuerza bruta para inicio de sesion (HTTP 429).
+2026-06-18 23:13:03 | [WARNING] | Intento de recuperacin invlido para: correo_inexistente_sospechoso@pnp.gob.pe
+2026-06-18 23:13:03 | [WARNING] | Intento de recuperacin invlido para: correo_inexistente_sospechoso@pnp.gob.pe
+2026-06-18 23:13:04 | [WARNING] | Intento de recuperacin invlido para: correo_inexistente_sospechoso@pnp.gob.pe
+2026-06-18 23:13:04 | [WARNING] | Intento de recuperacin invlido para: correo_inexistente_sospechoso@pnp.gob.pe
+2026-06-18 23:13:04 | [WARNING] | Intento de recuperacin invlido para: correo_inexistente_sospechoso@pnp.gob.pe
+2026-06-18 23:13:04 | [CRITICAL] | DEFENSA ACTIVA: IP testclient bloqueada por fuerza bruta (Mx. 5 intentos).
+2026-06-18 23:13:04 | [WARNING] | Ataque mitigado: IP testclient bloqueada por 15 minutos ms.
+[OK] Confirmado: Rate Limiting en forgot-password para mitigar spam SMTP.
+2026-06-18 23:13:06 | [CRITICAL] | DEFENSA ACTIVA: IP testclient bloqueada por fuerza bruta (Mx. 5 intentos).
+2026-06-18 23:13:06 | [WARNING] | Ataque mitigado: IP testclient bloqueada por 15 minutos ms.
+[OK] Confirmado: Defensa activa contra fuerza bruta de PIN en verify-code.
+[OK] Confirmado: Bloqueo activo de inyeccion SQL (SQLi) mediante sanitizacion de Pydantic.
+[OK] Confirmado: Bloqueo activo de inyeccion script HTML/JS (XSS).
+=== TODAS LAS PRUEBAS DE SEGURIDAD PASARON CORRECTAMENTE ===

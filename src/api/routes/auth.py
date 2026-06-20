@@ -90,9 +90,12 @@ class ResetPasswordRequest(BaseModel):
     newPassword: str
 
 @router.post("/forgot-password")
-def forgot_password(request: ForgotPasswordRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+def forgot_password(request: Request, body: ForgotPasswordRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    # 1. VERIFICACIÓN DE RATE LIMITING
+    ip_cliente = verificar_bloqueo_ip(request)
+    
     user_repo = UserRepository(db)
-    usuario = user_repo.get_by_email(request.email)
+    usuario = user_repo.get_by_email(body.email)
     
     if usuario and usuario.estado_usuario_sistema == "activo":
         # 1. Generar PIN de 6 dígitos
@@ -103,7 +106,7 @@ def forgot_password(request: ForgotPasswordRequest, background_tasks: Background
         
         # 3. Guardar en Base de Datos (Persistencia)
         nuevo_codigo = CodigoRecuperacion(
-            email_usuario=request.email, 
+            email_usuario=body.email, 
             pin_recuperacion=pin, 
             fecha_expiracion=expiracion
         )
@@ -111,56 +114,70 @@ def forgot_password(request: ForgotPasswordRequest, background_tasks: Background
         db.commit()
         
         # 4. Enviar de forma asíncrona
-        background_tasks.add_task(email_service.enviar_pin_recuperacion, request.email, pin)
+        background_tasks.add_task(email_service.enviar_pin_recuperacion, body.email, pin)
     else:
-        logger.warning(f"Intento de recuperación inválido para: {request.email}")
+        logger.warning(f"Intento de recuperación inválido para: {body.email}")
+        # En caso de recuperación fraudulenta o spam a correos inexistentes,
+        # penalizamos a la IP atacante para evitar escaneo o saturación SMTP.
+        registrar_falla(ip_cliente)
         
     # Siempre retornamos éxito para prevenir enumeración de usuarios (OWASP)
     return {"success": True, "message": "Si el correo existe y está activo, se le enviará un código de recuperación."}
 
 @router.post("/verify-code")
-def verify_code(request: VerifyCodeRequest, db: Session = Depends(get_db)):
+def verify_code(request: Request, body: VerifyCodeRequest, db: Session = Depends(get_db)):
+    # 1. VERIFICACIÓN DE RATE LIMITING
+    ip_cliente = verificar_bloqueo_ip(request)
+    
     # Buscar el PIN no usado y que no haya expirado
     codigo_db = db.query(CodigoRecuperacion).filter(
-        CodigoRecuperacion.email_usuario == request.email,
-        CodigoRecuperacion.pin_recuperacion == request.code,
+        CodigoRecuperacion.email_usuario == body.email,
+        CodigoRecuperacion.pin_recuperacion == body.code,
         CodigoRecuperacion.usado == False
     ).first()
     
     if not codigo_db:
+        registrar_falla(ip_cliente) # Penalizar IP por intentar adivinar el PIN
         raise HTTPException(status_code=400, detail="El código es incorrecto.")
         
     # IMPORTANTE: Validar tiempo (Time-Based Security)
-    # Ignoramos la zona horaria (naive) para la comparación directa o usamos utcnow
     if codigo_db.fecha_expiracion.replace(tzinfo=None) < datetime.utcnow():
+        registrar_falla(ip_cliente)
         raise HTTPException(status_code=400, detail="El código ha expirado.")
         
     return {"success": True, "message": "Código verificado correctamente."}
 
 @router.post("/reset-password")
-def reset_password(request: ResetPasswordRequest, db: Session = Depends(get_db)):
+def reset_password(request: Request, body: ResetPasswordRequest, db: Session = Depends(get_db)):
+    # 1. VERIFICACIÓN DE RATE LIMITING
+    ip_cliente = verificar_bloqueo_ip(request)
+    
     codigo_db = db.query(CodigoRecuperacion).filter(
-        CodigoRecuperacion.email_usuario == request.email,
-        CodigoRecuperacion.pin_recuperacion == request.code,
+        CodigoRecuperacion.email_usuario == body.email,
+        CodigoRecuperacion.pin_recuperacion == body.code,
         CodigoRecuperacion.usado == False
     ).first()
     
     if not codigo_db or codigo_db.fecha_expiracion.replace(tzinfo=None) < datetime.utcnow():
+        registrar_falla(ip_cliente)
         raise HTTPException(status_code=400, detail="El código es incorrecto o ha expirado.")
         
     user_repo = UserRepository(db)
-    usuario = user_repo.get_by_email(request.email)
+    usuario = user_repo.get_by_email(body.email)
     
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado.")
         
     # 1. Actualizar Hash de Contraseña
-    usuario.password_usuario_sistema = Hash.bcrypt(request.newPassword)
+    usuario.password_usuario_sistema = Hash.bcrypt(body.newPassword)
     
     # 2. Quemar el código para que no pueda reutilizarse (Mitigación de Replay Attacks)
     codigo_db.usado = True
     
     db.commit()
     
-    logger.info(f"El usuario {request.email} ha restablecido su contraseña con éxito.")
+    # Resetear penalizaciones tras un restablecimiento exitoso
+    resetear_intentos(ip_cliente)
+    
+    logger.info(f"El usuario {body.email} ha restablecido su contraseña con éxito.")
     return {"success": True, "message": "Contraseña restablecida exitosamente."}
