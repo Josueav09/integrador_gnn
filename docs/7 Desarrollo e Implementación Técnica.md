@@ -724,14 +724,40 @@ Resumen de auditorías ejecutadas mediante la herramienta Google Lighthouse CLI:
 
 ## Anexo H. Evidencia de Historial de Commits en el Repositorio
 Historial de commits consolidado de Git en la rama principal `josue_dev`:
-```text
-* 85cd238 - Josue, 2026-06-17 07:21:28 : [UPDATE] create a new document about github actions backend-ci.yml
-* c5bd733 - Josue, 2026-06-11 22:33:46 : [UPDATE] improvements to the tests used for mitigation
-* b5852b8 - Josue, 2026-06-09 20:59:33 : [UPDATE] improve testing
-* af2aebc - Josue, 2026-05-22 02:43:52 : [UPDATE] We modified the Dockerfile so we can deploy
-* 20dfda4 - Josue, 2026-05-22 02:17:25 : [UPDATE] Integration of the backend with the frontend across all routes
-* 35183f1 - Josue, 2026-05-20 01:07:59 : feat(arquitectura): refactorización integral APF2, ORM/DAO con GeoAlchemy2
-```
+
+### 1. Repositorio Backend (Predicciones_GNN)
+| Hash | Autor | Fecha / Hora | Mensaje de Commit |
+| :--- | :--- | :--- | :--- |
+| **`0243749`** | Josue | 2026-06-20 02:14:21 | `[UPDATE] Implementacion de rate limiting, monitoreo, plan de reversa, guia de despliegue y actualizacion del reporte tecnico APF3` |
+| **`85cd238`** | Josue | 2026-06-17 07:21:28 | `[UPDATE] create a new document about github actions backend-ci.yml` |
+| **`c5bd733`** | Josue | 2026-06-11 22:33:46 | `[UPDATE] improvements to the tests used for mitigation` |
+| **`b5852b8`** | Josue | 2026-06-09 20:59:33 | `[UPDATE] improve testing` |
+| **`af2aebc`** | Josue | 2026-05-22 02:43:52 | `[UPDATE] We modified the Dockerfile so we can deploy` |
+| **`20dfda4`** | Josue | 2026-05-22 02:17:25 | `[UPDATE] Integration of the backend with the frontend across all routes without mock data` |
+| **`709957a`** | Josueav09 | 2026-05-21 09:01:07 | `Merge pull request #4 from Josueav09/master` |
+| **`dec6bf0`** | Josueav09 | 2026-05-21 09:00:37 | `Merge pull request #3 from Josueav09/josue_dev` |
+| **`9cd55b7`** | Josue | 2026-05-21 06:26:13 | `UPDATE Data-Driven Integration` |
+| **`cf894b8`** | Josueav09 | 2026-05-20 10:10:55 | `Merge pull request #2 from Josueav09/josue_dev` |
+| **`e7cfa9e`** | Josue | 2026-05-20 10:09:36 | `update Authentication Integration` |
+| **`35942af`** | Josueav09 | 2026-05-20 01:08:53 | `Merge pull request #1 from Josueav09/josue_dev` |
+| **`35183f1`** | Josue | 2026-05-20 01:07:59 | `feat(arquitectura): refactorización integral APF2, ORM/DAO con GeoAlchemy2 y optimización espacial ST-GNN` |
+| **`e75de4c`** | Josue | 2026-05-20 00:34:00 | `Backend logic of integrador_gnn` |
+
+### 2. Repositorio Frontend (Frontend---Integrador-2)
+| Hash | Autor | Fecha / Hora | Mensaje de Commit |
+| :--- | :--- | :--- | :--- |
+| **`032466b`** | Josue | 2026-06-17 07:19:29 | `[UPDATE] create a doc about github actions, frontend-cy.yml` |
+| **`e86662a`** | Josue | 2026-06-16 19:57:55 | `[UPDATE] improvements to the tests used selenium with ids in the elemnts` |
+| **`86b6187`** | Josue | 2026-06-11 22:34:39 | `[UPDATE] improvements to the tests used for mitigation` |
+| **`df8bddf`** | Josue | 2026-05-22 03:25:52 | `[UPDATE] add vercel.json` |
+| **`aeab94b`** | Josue | 2026-05-22 02:16:50 | `[UPDATE] Integration of the backend with the frontend across all routes without mock data` |
+| **`f465156`** | Josue | 2026-05-21 06:27:25 | `UPDATE Data-Driven Integration` |
+| **`71c6974`** | Josue | 2026-05-20 10:07:38 | `update Authentication Integration` |
+| **`596f71f`** | Josueav09 | 2026-05-20 00:40:24 | `Merge pull request #1 from MB2534/matias` |
+| **`11ab1e7`** | Matias | 2026-05-19 21:22:35 | `Polish UI: icons, animations, map visuals, and mobile nav.` |
+| **`96eb543`** | Matias | 2026-05-19 21:16:24 | `Add session auth, protected routes, and lazy-loaded dashboard.` |
+| **`25e5400`** | Josue | 2026-05-19 23:57:09 | `feature: add Docker and Nginx configuration for production` |
+| **`73b2d7d`** | Matias | 2026-05-19 10:39:11 | `Implement GNN Crime AI frontend with auth flow and dashboard views.` |
 
 ---
 
