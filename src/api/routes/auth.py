@@ -12,7 +12,14 @@ import random
 from fastapi import BackgroundTasks
 
 # Importamos nuestro nuevo escudo
-from src.security.rate_limit import verificar_bloqueo_ip, registrar_falla, resetear_intentos
+from src.security.rate_limit import (
+    verificar_bloqueo_ip,
+    registrar_falla,
+    resetear_intentos,
+    ALCANCE_LOGIN,
+    ALCANCE_FORGOT,
+    ALCANCE_VERIFY_PIN,
+)
 
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
@@ -60,7 +67,7 @@ def register(credenciales: RegisterRequest, db: Session = Depends(get_db)):
 def login(request: Request, credenciales: LoginRequest, db: Session = Depends(get_db)):
     
     # 1. VERIFICACIÓN DE RATE LIMITING (Defensa Perimetral)
-    ip_cliente = verificar_bloqueo_ip(request)
+    ip_cliente = verificar_bloqueo_ip(request, ALCANCE_LOGIN)
     
     logger.info(f"Intento de acceso detectado para el usuario: {credenciales.email} desde IP: {ip_cliente}")
     
@@ -70,7 +77,7 @@ def login(request: Request, credenciales: LoginRequest, db: Session = Depends(ge
     # Manejo genérico de errores + Registro de Falla
     if not usuario:
         logger.warning(f"Intento fallido: El correo {credenciales.email} no existe.")
-        registrar_falla(ip_cliente) # <--- Castigamos la IP
+        registrar_falla(ip_cliente, ALCANCE_LOGIN)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, 
             detail="Credenciales incorrectas"
@@ -85,14 +92,14 @@ def login(request: Request, credenciales: LoginRequest, db: Session = Depends(ge
         
     if not Hash.verify(usuario.password_usuario_sistema, credenciales.password):
         logger.critical(f"ALERTA DE SEGURIDAD: Contraseña incorrecta para {credenciales.email}.")
-        registrar_falla(ip_cliente) # <--- Castigamos la IP
+        registrar_falla(ip_cliente, ALCANCE_LOGIN)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, 
             detail="Credenciales incorrectas"
         )
         
     # Si llegó hasta aquí, el login fue exitoso. Limpiamos su historial.
-    resetear_intentos(ip_cliente)
+    resetear_intentos(ip_cliente, ALCANCE_LOGIN)
     logger.info(f"Acceso exitoso. Generando Token JWT para {credenciales.email}.")
     
     rol_str = str(usuario.id_rol)
@@ -117,7 +124,14 @@ class ResetPasswordRequest(BaseModel):
     newPassword: str
 
 @router.post("/forgot-password")
-def forgot_password(request: ForgotPasswordRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+def forgot_password(
+    http_request: Request,
+    request: ForgotPasswordRequest,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+):
+    ip_cliente = verificar_bloqueo_ip(http_request, ALCANCE_FORGOT)
+    registrar_falla(ip_cliente, ALCANCE_FORGOT)
     user_repo = UserRepository(db)
     usuario = user_repo.get_by_email(request.email)
     
@@ -146,7 +160,8 @@ def forgot_password(request: ForgotPasswordRequest, background_tasks: Background
     return {"success": True, "message": "Si el correo existe y está activo, se le enviará un código de recuperación."}
 
 @router.post("/verify-code")
-def verify_code(request: VerifyCodeRequest, db: Session = Depends(get_db)):
+def verify_code(http_request: Request, request: VerifyCodeRequest, db: Session = Depends(get_db)):
+    ip_cliente = verificar_bloqueo_ip(http_request, ALCANCE_VERIFY_PIN)
     # Buscar el PIN no usado y que no haya expirado
     codigo_db = db.query(CodigoRecuperacion).filter(
         CodigoRecuperacion.email_usuario == request.email,
@@ -155,13 +170,16 @@ def verify_code(request: VerifyCodeRequest, db: Session = Depends(get_db)):
     ).first()
     
     if not codigo_db:
+        registrar_falla(ip_cliente, ALCANCE_VERIFY_PIN)
         raise HTTPException(status_code=400, detail="El código es incorrecto.")
         
     # IMPORTANTE: Validar tiempo (Time-Based Security)
     # Ignoramos la zona horaria (naive) para la comparación directa o usamos utcnow
     if codigo_db.fecha_expiracion.replace(tzinfo=None) < datetime.utcnow():
+        registrar_falla(ip_cliente, ALCANCE_VERIFY_PIN)
         raise HTTPException(status_code=400, detail="El código ha expirado.")
         
+    resetear_intentos(ip_cliente, ALCANCE_VERIFY_PIN)
     return {"success": True, "message": "Código verificado correctamente."}
 
 @router.post("/reset-password")

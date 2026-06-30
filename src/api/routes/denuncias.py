@@ -7,7 +7,7 @@ import re
 from src.core.database import get_db
 from src.repository.denuncia_repo import DenunciaRepository
 from src.security.jwt_handler import get_current_user
-from src.security.rate_limit import verificar_bloqueo_ip, registrar_falla
+from src.security.rate_limit import verificar_bloqueo_ip, registrar_falla, ALCANCE_DENUNCIA
 
 router = APIRouter(prefix="/denuncias", tags=["Denuncias Ciudadanas (Cuarentena)"])
 
@@ -45,7 +45,7 @@ def registrar_denuncia_publica(request: Request, denuncia: DenunciaCreate, db: S
     Utiliza el Rate Limiting estricto para evitar DDoS de datos falsos.
     """
     try:
-        ip_cliente = verificar_bloqueo_ip(request)
+        ip_cliente = verificar_bloqueo_ip(request, ALCANCE_DENUNCIA)
     except HTTPException as e:
         raise e
 
@@ -62,10 +62,10 @@ def registrar_denuncia_publica(request: Request, denuncia: DenunciaCreate, db: S
         return {"success": True, "message": "Denuncia recibida en cola de verificación.", "id": nueva_denuncia.id_denuncia_ciudadana}
     except ValueError as ve:
         # Registramos la falla contra la IP por intento malicioso
-        registrar_falla(ip_cliente)
+        registrar_falla(ip_cliente, ALCANCE_DENUNCIA)
         raise HTTPException(status_code=422, detail=str(ve))
     except Exception as e:
-        registrar_falla(ip_cliente)
+        registrar_falla(ip_cliente, ALCANCE_DENUNCIA)
         raise HTTPException(status_code=500, detail="Error interno al registrar denuncia")
 
 @router.get("/pendientes")

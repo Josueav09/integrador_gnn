@@ -133,4 +133,41 @@ Modificados:
   - Ejecutar verify_system.py y documentar resultados en informe
   - Despliegue cloud del backend (Render/Railway/Docker) con URL pública
 
+
+--------------------------------------------------------------------------------
+8. COMPATIBILIDAD SELENIUM + MIGRACIONES BD (Jun 2026)
+--------------------------------------------------------------------------------
+
+Contrato compartido: ../CONTRATO_PRUEBAS_E2E.txt
+
+MIGRACIONES SQL (carpeta migrations/):
+  001_apf3_lotes_importacion.sql
+    Tabla: lotes_importacion
+    Columnas nuevas: validos, invalidos (IF NOT EXISTS)
+
+  002_apf3_denuncias_cuarentena.sql
+    Tabla: denuncias_ciudadanas (+ índices estado/fecha)
+
+  003_apf3_auditoria_seguridad.sql
+    Tabla nueva: auditoria_seguridad (eventos de seguridad APF3)
+
+Aplicar:
+  python scripts/apply_migrations.py
+
+SEGURIDAD — rate limit por alcance (src/security/rate_limit.py):
+  - login
+  - forgot_password (anti-spam SMTP)
+  - verify_code (anti fuerza bruta PIN)
+  - denuncia_publica
+
+ARCHIVOS NUEVOS:
+  tests/test_security_robustness.py  (Anexo D del informe equipo)
+  tests/test_db_integration.py         (handshake Supabase + SMTP)
+  scripts/apply_migrations.py
+  migrations/README.md
+
+EJECUTAR PARA EVIDENCIAS:
+  pytest tests/test_security_robustness.py -v
+  pytest tests/test_db_integration.py -v
+
 ================================================================================
