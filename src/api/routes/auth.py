@@ -10,11 +10,13 @@ from src.utils.logger import logger
 from src.services import email_service
 import random
 from fastapi import BackgroundTasks
+from src.core.config import settings
 
 # Importamos nuestro nuevo escudo
 from src.security.rate_limit import (
     verificar_bloqueo_ip,
     registrar_falla,
+    registrar_intento,
     resetear_intentos,
     ALCANCE_LOGIN,
     ALCANCE_FORGOT,
@@ -131,13 +133,14 @@ def forgot_password(
     db: Session = Depends(get_db),
 ):
     ip_cliente = verificar_bloqueo_ip(http_request, ALCANCE_FORGOT)
-    registrar_falla(ip_cliente, ALCANCE_FORGOT)
+    registrar_intento(ip_cliente, ALCANCE_FORGOT)
     user_repo = UserRepository(db)
     usuario = user_repo.get_by_email(request.email)
     
     if usuario and usuario.estado_usuario_sistema == "activo":
-        # 1. Generar PIN de 6 dígitos
-        pin = str(random.randint(100000, 999999))
+        pin = settings.TEST_PIN if settings.TEST_MODE else str(random.randint(100000, 999999))
+        if settings.TEST_MODE:
+            logger.info(f"[TEST_MODE] PIN de recuperación para {request.email}: {pin}")
         
         # 2. Calcular expiración (15 minutos desde ahora)
         expiracion = datetime.utcnow() + timedelta(minutes=15)

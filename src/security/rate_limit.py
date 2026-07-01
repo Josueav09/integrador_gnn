@@ -1,5 +1,6 @@
 import time
 from fastapi import Request, HTTPException, status
+from src.core.config import settings
 from src.utils.logger import logger
 
 # Clave compuesta alcance:IP — evita que login bloquee denuncias públicas o viceversa.
@@ -21,6 +22,8 @@ def _clave(ip: str, alcance: str) -> str:
 def verificar_bloqueo_ip(request: Request, alcance: str = ALCANCE_LOGIN) -> str:
     """Verifica si la IP actual tiene permitido intentar la acción indicada."""
     ip = request.client.host if request.client else "unknown"
+    if settings.TEST_MODE:
+        return ip
     tiempo_actual = time.time()
     clave = _clave(ip, alcance)
 
@@ -40,8 +43,17 @@ def verificar_bloqueo_ip(request: Request, alcance: str = ALCANCE_LOGIN) -> str:
     return ip
 
 
+def registrar_intento(ip: str, alcance: str = ALCANCE_LOGIN) -> None:
+    """Cuenta solicitudes por volumen (anti-spam). No implica credencial incorrecta."""
+    if settings.TEST_MODE:
+        return
+    registrar_falla(ip, alcance)
+
+
 def registrar_falla(ip: str, alcance: str = ALCANCE_LOGIN) -> None:
     """Aumenta el contador de fallas. Si llega al límite, bloquea la IP para ese alcance."""
+    if settings.TEST_MODE:
+        return
     clave = _clave(ip, alcance)
     if clave not in registro_ips:
         registro_ips[clave] = {"intentos": 0, "bloqueado_hasta": 0}
