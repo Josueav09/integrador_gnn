@@ -7,6 +7,7 @@ import shutil
 
 from src.core.database import get_db
 from src.security.jwt_handler import get_current_admin_or_investigator
+from src.utils.upload_validation import validate_csv_bytes, validate_json_bytes
 
 router = APIRouter(prefix="/admin", tags=["Administración del Sistema"])
 
@@ -73,18 +74,32 @@ async def cargar_archivo_csv(
     """
     if not file.filename.endswith('.csv') and not file.filename.endswith('.json'):
         raise HTTPException(status_code=400, detail="Formato de archivo no válido. Solo CSV o JSON.")
-        
+
+    raw_content = await file.read()
+    if not raw_content:
+        raise HTTPException(status_code=400, detail="El archivo está vacío.")
+
+    try:
+        if file.filename.endswith('.csv'):
+            valid_rows, invalid_rows = validate_csv_bytes(raw_content)
+            file_format = "csv"
+        else:
+            valid_rows, invalid_rows = validate_json_bytes(raw_content)
+            file_format = "json"
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    if valid_rows == 0:
+        raise HTTPException(
+            status_code=400,
+            detail="Ningún registro cumple el formato requerido (id_cuadrante, id_tipo_delito, fecha_delito, ubicacion).",
+        )
+
     file_path = os.path.join(UPLOAD_DIR, file.filename)
     with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-        
-    # Contar filas para el log del historial
-    row_count = 0
-    try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            row_count = sum(1 for line in f) - 1 # Descontar cabecera
-    except Exception:
-        row_count = 15420 # Fallback
+        buffer.write(raw_content)
+
+    row_count = valid_rows + invalid_rows
         
     # Guardar en base de datos en la tabla lotes_importacion
     db.execute(text("""
@@ -93,18 +108,19 @@ async def cargar_archivo_csv(
     """), {
         "id_user": admin_user["user_id"],
         "filename": file.filename,
-        "format": "csv" if file.filename.endswith('.csv') else "json",
+        "format": file_format,
         "total": row_count,
-        "valid": row_count,
-        "invalid": 0,
-        "state": "completado"
+        "valid": valid_rows,
+        "invalid": invalid_rows,
+        "state": "completado" if invalid_rows == 0 else "con_advertencias"
     })
     db.commit()
     
     return {
         "success": True,
         "filename": file.filename,
-        "registros": row_count,
+        "registros": valid_rows,
+        "invalidos": invalid_rows,
         "message": "Archivo cargado y procesado exitosamente."
     }
 
