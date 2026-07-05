@@ -56,6 +56,10 @@ def enviar_pin_recuperacion(destinatario: str, pin: str):
     """
     Despacha un PIN de 6 dígitos para recuperación de contraseña.
     """
+    if settings.TEST_MODE:
+        logger.info(f"[TEST_MODE] PIN de recuperación para {destinatario}: {pin}")
+        return
+
     if SENDER_EMAIL == "tu_correo@gmail.com":
         logger.warning(f"[SIMULACIÓN SMTP] Se enviaría PIN {pin} a {destinatario} para recuperación.")
         return

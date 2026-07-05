@@ -1,0 +1,173 @@
+================================================================================
+  GNN CRIME AI - BACKEND (integrador_gnn)
+  Resumen de cambios para APF3
+  Fecha: Junio 2026
+  Rama de trabajo: matias
+================================================================================
+
+OBJETIVO
+--------
+Validar correctamente la carga de archivos CSV/JSON en el módulo de
+administración y soportar las pruebas de integración del entregable APF3.
+
+
+--------------------------------------------------------------------------------
+1. VALIDACIÓN DE CARGA CSV/JSON
+--------------------------------------------------------------------------------
+
+Archivo nuevo:
+  src/utils/upload_validation.py
+
+Funciones:
+  - validate_csv_bytes(content) -> (validos, invalidos)
+  - validate_json_bytes(content) -> (validos, invalidos)
+
+Campos requeridos (alineados con el frontend):
+  - id_cuadrante
+  - id_tipo_delito
+  - fecha_delito
+  - ubicacion
+
+Validaciones:
+  - CSV: cabecera obligatoria, columnas requeridas, al menos 1 fila de datos
+  - JSON: arreglo no vacío, cada objeto con los 4 campos
+  - Filas/registros incompletos se cuentan como inválidos
+  - Normalización de nombres de columnas (minúsculas, sin BOM utf-8-sig)
+
+
+--------------------------------------------------------------------------------
+2. ENDPOINT ADMIN - upload-csv (MODIFICADO)
+--------------------------------------------------------------------------------
+
+Archivo: src/api/routes/admin.py
+
+Cambios:
+  - Lee el archivo completo en memoria antes de guardar
+  - Rechaza archivo vacío (HTTP 400)
+  - Valida esquema con upload_validation antes de escribir en disco
+  - ELIMINADO fallback que inventaba 15420 registros si fallaba la lectura
+  - Respuesta incluye:
+      * registros  -> cantidad de filas válidas
+      * invalidos  -> cantidad de filas inválidas omitidas
+      * message    -> texto de éxito
+  - Estado en BD (lotes_importacion):
+      * valid / invalid reales
+      * state: "completado" o "con_advertencias" si hay inválidos
+  - Errores de formato devuelven HTTP 400 con mensaje claro en detail
+
+Ejemplo error 400:
+  "Formato CSV inválido. Faltan columnas: fecha_delito, ubicacion."
+
+
+--------------------------------------------------------------------------------
+3. PRUEBAS AUTOMATIZADAS (PYTEST)
+--------------------------------------------------------------------------------
+
+Archivo nuevo:
+  tests/test_upload_validation.py
+
+Casos:
+  - CSV válido -> 1 válido, 0 inválidos
+  - CSV sin columnas requeridas -> ValueError
+  - JSON válido -> 1 válido, 0 inválidos
+  - JSON con sintaxis inválida -> ValueError
+
+Ejecutar (con venv activo y pytest instalado):
+  python -m pytest tests/test_upload_validation.py -q
+
+
+--------------------------------------------------------------------------------
+4. CONTEXTO - RESTAURACIÓN API (trabajo previo en rama matias)
+--------------------------------------------------------------------------------
+
+Incluido en la misma línea de trabajo del integrador, relevante para APF3:
+
+Rutas restauradas desde master:
+  - dashboard.py, denuncias.py, usuarios.py, admin.py
+
+Otros:
+  - email_service.py, gnn_service.py completo
+  - models.py (CodigoRecuperacion, DenunciaCiudadana)
+  - POST /auth/register
+  - jwt_handler con get_current_admin_or_investigator
+  - tensor_panel.npy, panel_dates.json, grafo corregido
+
+Commits de referencia (autor MB2534):
+  - Restaurar API completa
+  - Fixes grafo edge index
+
+
+--------------------------------------------------------------------------------
+5. ARCHIVOS TOCADOS EN ESTE ENTREGABLE UX/VALIDACIÓN
+--------------------------------------------------------------------------------
+
+Nuevos:
+  src/utils/upload_validation.py
+  tests/test_upload_validation.py
+  CAMBIOS_APF3.txt (este archivo)
+
+Modificados:
+  src/api/routes/admin.py
+
+
+--------------------------------------------------------------------------------
+6. CÓMO PROBAR CON EL FRONTEND
+--------------------------------------------------------------------------------
+
+1. Levantar backend: uvicorn en puerto 8000
+2. Login como admin (admin@pnp.gob.pe)
+3. Ir a Administración -> Cargar Datos
+4. Probar:
+   - CSV correcto con 4 columnas -> éxito
+   - CSV sin columnas -> error 400 (front muestra mensaje antes de subir)
+   - .xlsx u otro formato -> rechazado en frontend
+   - Backend apagado -> frontend muestra toast de conexión
+
+
+--------------------------------------------------------------------------------
+7. PENDIENTE (recomendado para APF3 completo)
+--------------------------------------------------------------------------------
+
+  - Formalizar suite pytest de integración (auth -> dashboard -> predict)
+  - pytest-cov con reporte HTML
+  - Ejecutar verify_system.py y documentar resultados en informe
+  - Despliegue cloud del backend (Render/Railway/Docker) con URL pública
+
+
+--------------------------------------------------------------------------------
+8. COMPATIBILIDAD SELENIUM + MIGRACIONES BD (Jun 2026)
+--------------------------------------------------------------------------------
+
+Contrato compartido: ../CONTRATO_PRUEBAS_E2E.txt
+
+MIGRACIONES SQL (carpeta migrations/):
+  001_apf3_lotes_importacion.sql
+    Tabla: lotes_importacion
+    Columnas nuevas: validos, invalidos (IF NOT EXISTS)
+
+  002_apf3_denuncias_cuarentena.sql
+    Tabla: denuncias_ciudadanas (+ índices estado/fecha)
+
+  003_apf3_auditoria_seguridad.sql
+    Tabla nueva: auditoria_seguridad (eventos de seguridad APF3)
+
+Aplicar:
+  python scripts/apply_migrations.py
+
+SEGURIDAD — rate limit por alcance (src/security/rate_limit.py):
+  - login
+  - forgot_password (anti-spam SMTP)
+  - verify_code (anti fuerza bruta PIN)
+  - denuncia_publica
+
+ARCHIVOS NUEVOS:
+  tests/test_security_robustness.py  (Anexo D del informe equipo)
+  tests/test_db_integration.py         (handshake Supabase + SMTP)
+  scripts/apply_migrations.py
+  migrations/README.md
+
+EJECUTAR PARA EVIDENCIAS:
+  pytest tests/test_security_robustness.py -v
+  pytest tests/test_db_integration.py -v
+
+================================================================================
