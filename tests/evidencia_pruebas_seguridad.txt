@@ -1,0 +1,72 @@
+PS C:\Users\JOSUE\Downloads\CICLO 9\Integrador_de_software\Entrenamiento_GNN\tests_automatizados_selenium> python test_suite.py
+>> 
+
+[SETUP] Inicializando Chrome WebDriver para1 http://localhost:3000...
+
+DevTools listening on ws://127.0.0.1:53823/devtools/browser/ef7ba75b-86e1-4284-bdee-9e680b6360a6
+[10764:26580:0619/213454.783:ERROR:ui\gl\direct_composition_support.cc:616] AMD VideoProcessorGetOutputExtension failed: Error no especificado (0x80004005)
+test_01_public_crime_report (__main__.STGNNTestSuite.test_01_public_crime_report)
+1. CASO DE PRUEBA: Reporte ciudadano publico anonimo (Crowdsourcing) ... 
+=== [TEST 1] REGISTRO DE DENUNCIA CIUDADANA ANONIMA ===
+[27428:35708:0619/213459.868:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR
+[27428:35708:0619/213459.873:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR
+[27428:35708:0619/213459.873:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR
+[27428:35708:0619/213459.954:ERROR:google_apis\gcm\engine\mcs_client.cc:702]   Error code: 401  Error message: Authentication Failed: wrong_secret
+[27428:35708:0619/213459.954:ERROR:google_apis\gcm\engine\mcs_client.cc:704] Failed to log in to GCM, resetting connection.
+[OK] Denuncia publica enviada y en cola de cuarentena (PostGIS ST_Contains preparada).
+ok
+test_02_login_validation_flow (__main__.STGNNTestSuite.test_02_login_validation_flow)
+2. CASO DE PRUEBA: Autenticacion con verificacion de errores y exito (RBAC/JWT) ...
+=== [TEST 2] FLUJO DE AUTENTICACION PNP Y VALIDACION DE USABILIDAD ===
+[VALIDACION] El boton de inicio de sesion se encuentra deshabilitado por defecto.
+[PINTADO] Error en rojo bajo el input 'Correo': 'El formato del correo institucional es incorrecto.'.
+[PINTADO] Toast global de EXITO (verde) en esquina superior derecha: 'Sesion iniciada con exito'.
+[OK] Redireccionado a /dashboard de manera segura.
+ok
+test_03_dashboard_filters (__main__.STGNNTestSuite.test_03_dashboard_filters)
+3. CASO DE PRUEBA: Filtros interactivos del Dashboard (WPO AbortController) ...
+=== [TEST 3] FILTROS DEL DASHBOARD Y KPI CARD ===
+[OK] Filtros de anio actualizados y visualizaciones cargadas correctamente.
+ok
+test_04_gis_crime_map (__main__.STGNNTestSuite.test_04_gis_crime_map)
+4. CASO DE PRUEBA: Mapa interactivo GIS ( Leaflet ) y Cambio de Modos ...
+=== [TEST 4] MAPA GEOGRAFICO DE DELITOS ===
+Created TensorFlow Lite XNNPACK delegate for CPU.
+[OK] Mapa GIS cargado y predicciones de Comas renderizadas en Leaflet.
+ok
+test_05_quarantine_inbox (__main__.STGNNTestSuite.test_05_quarantine_inbox)
+5. CASO DE PRUEBA: Aprobacion de denuncias en la Bandeja de Cuarentena (PostGIS ST_Contains) ...
+=== [TEST 5] BANDEJA DE CUARENTENA (INBOX) ===
+[INFO] No hay denuncias pendientes en cuarentena en este momento.
+ok
+test_06_admin_retrain_pipeline (__main__.STGNNTestSuite.test_06_admin_retrain_pipeline)
+6. CASO DE PRUEBA: Panel de control y Trigger de Reentrenamiento GNN ...
+=== [TEST 6] PANEL DE ADMINISTRACION Y REENTRENAMIENTO ===
+[OK] Solicitud de reentrenamiento enviada y pipeline ejecutandose en Docker.
+ok
+test_07_admin_upload_validation_errors (__main__.STGNNTestSuite.test_07_admin_upload_validation_errors)  
+7. CASO DE PRUEBA: Validacion de archivos en cliente (Admin Upload Toast Errors) ...
+=== [TEST 7] PRUEBA DE USABILIDAD: ERRORES DE CARGA Y CASOS EXITO ===
+[TEST 7.1] Subiendo archivo con extension incorrecta (.xlsx)...
+[PINTADO] Toast de ERROR en esquina superior derecha (rojo): 'Solo se permiten archivos CSV o JSON'.     
+[TEST 7.2] Subiendo archivo vacio (0 bytes)...
+[PINTADO] Toast de ERROR en esquina superior derecha (rojo): 'El archivo esta vacio.'.
+[TEST 7.3] Subiendo CSV con cabeceras faltantes...
+[PINTADO] Toast de ERROR en esquina superior derecha (rojo): 'Columnas faltantes en el CSV: id_tipo_delito, ubicacion.'.
+[TEST 7.4] Subiendo CSV valido...
+[PINTADO] Toast de EXITO en esquina superior derecha (verde): 'Éxito: cargado "test_valido.csv" con 1 registros.'.
+ok
+test_08_register_validation_flow (__main__.STGNNTestSuite.test_08_register_validation_flow)
+8. CASO DE PRUEBA: Registro con verificacion de errores y exito (RBAC) ... 
+=== [TEST 8] FLUJO DE REGISTRO Y VALIDACION DE ERRORES EN CLIENTE ===
+[PINTADO] Error en rojo debajo de Nombre: 'El nombre es obligatorio.'.
+[27428:35708:0619/213528.508:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[PINTADO] Error en rojo debajo de Correo: 'El formato del correo institucional es incorrecto.'.
+[PINTADO] Error en rojo debajo de Contrasena: 'La contrasena debe tener al menos 6 caracteres.'.
+[PINTADO] Toast de EXITO en esquina superior derecha (verde): 'Registro completado de forma simulada!'.
+ok
+
+[TEARDOWN] Cerrando Chrome WebDriver...
+
+----------------------------------------------------------------------
+Ran 8 tests in 41.887s
