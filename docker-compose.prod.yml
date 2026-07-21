@@ -1,0 +1,13 @@
+services:
+  api_predictiva:
+    container_name: pnp-backend-prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      TEST_MODE: "0"
+    restart: unless-stopped
