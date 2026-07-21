@@ -44,3 +44,29 @@ Para que el servidor en la nube pueda guardar los datos de criminalidad y verifi
 5. Render iniciará automáticamente un nuevo despliegue (*redeploy*) inyectando estos datos en el contenedor seguro.
 
 ¡Listo! Con estas configuraciones, tu backend de Inteligencia Artificial se levantará con total estabilidad y seguridad en la nube.
+
+---
+
+## 3. Despliegue en Producción
+
+Antes de publicar el servicio, verifica estos puntos:
+
+1. `TEST_MODE=0` en la nube para desactivar el modo laboratorio.
+2. No usar `--reload` ni volúmenes de código montado en producción.
+3. Confirmar que los artefactos ML obligatorios estén dentro de la imagen.
+4. Ejecutar las migraciones antes de poner el servicio en línea.
+
+### Comando recomendado con Docker Compose de producción
+
+```bash
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+### Validación posterior al despliegue
+
+```bash
+curl http://localhost:8000/
+curl http://localhost:8000/monitoring/status
+```
+
+Si la respuesta raíz devuelve `status: ok` y el monitoreo devuelve `status: ok`, el backend quedó operativo.

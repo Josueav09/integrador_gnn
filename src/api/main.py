@@ -13,6 +13,7 @@ if str(BASE_DIR) not in sys.path:
 from src.model.st_gnn import RedEspacioTemporal
 
 # --- IMPORTACIÓN DE LOS NUEVOS ROUTERS MODULARES ---
+from src.api.routes import auth, predict, dashboard, denuncias, usuarios, admin, monitoring, chaos
 from src.api.routes import auth, predict, dashboard, denuncias, usuarios, admin, monitoring, health
 # ---------------------------------------------------
 
@@ -85,6 +86,7 @@ app.include_router(denuncias.router)
 app.include_router(usuarios.router)
 app.include_router(admin.router)
 app.include_router(monitoring.router)
+app.include_router(chaos.router)
 app.include_router(health.router)
 
 @app.get("/")
